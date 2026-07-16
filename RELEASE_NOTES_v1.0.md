@@ -11,12 +11,18 @@ special-issue submission.
 - representative raw-data samples;
 - main and supplementary figures;
 - data dictionary and execution manuals.
+  
 
-## Separate release asset
+## Full reproducibility asset
 
-Upload `L4_Hebbian_Interference_Geometry_full_reproducibility_v1.0.zip`
-as a release asset. It contains the complete trial-level CSV files and the
-audit-ready reproducibility archive.
+The complete trial-level CSV files and the audit-ready reproducibility
+archive are provided as the attached release asset:
 
-After uploading, replace repository/release placeholders in `README.md` and
-`CITATION.cff`, then record the final commit hash in the manuscript.
+`L4_Hebbian_Interference_Geometry_full_reproducibility_v1.0.zip`
+
+SHA-256:
+
+`e50600e3a4a5f1a3dd37de3ce2d531c5f3dd96cce1b58a6158e30a608e312f32`
+
+This release fixes the code, aggregated data, figures, parameter settings,
+and complete numerical archive used for the associated manuscript.

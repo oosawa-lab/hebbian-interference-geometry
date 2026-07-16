@@ -1,0 +1,56 @@
+L4/V04 local simulation instructions
+====================================
+
+Files:
+- L4_V04_local_simulation_20260710_0734JST.py
+- L4_V04_local_simulation_instructions_20260710_0734JST.txt
+
+Purpose:
+This script reproduces the main numerical observables for the L4/V04 manuscript:
+Hopfield Hebbian writing directions, intensive/cumulative interference costs,
+nearest-load finite-size scaling, and Randers writing/erasing asymmetry.
+
+Requirements:
+Python 3.9 or later, numpy, matplotlib.
+
+Install if needed:
+
+  python3 -m pip install numpy matplotlib
+
+Quick smoke test:
+
+  python3 L4_V04_local_simulation_20260710_0734JST.py --quick
+
+Recommended V04 reproduction run:
+
+  python3 L4_V04_local_simulation_20260710_0734JST.py \
+    --outdir L4_V04_local_results \
+    --Ns 64 128 256 512 1024 \
+    --loads 0.05 0.10 0.15 0.20 0.25 0.30 0.35 0.40 0.45 0.50 0.55 0.60 \
+    --reps 120 \
+    --corr 0.35 \
+    --lambda-interference 2.0 \
+    --randers-alpha 0.15 \
+    --reference-loads 0.10 0.30 0.60 \
+    --nearest-load-tolerance 0.02
+
+Main output figures:
+
+  figs/fig2_V04_intensive_cost_errorbars.png/.pdf
+  figs/fig3_V04_deltaF_intensive_vs_cumulative.png/.pdf
+  figs/fig4_V04_finite_size_scaling_nearest_load.png/.pdf
+  figs/fig5_V04_randers_asymmetry.png/.pdf
+  figs/figS1_V04_intensive_susceptibility.png/.pdf
+
+Main CSV files:
+
+  data/L4_V04_trial_level_costs.csv
+  data/L4_V04_cost_summary.csv
+  data/L4_V04_deltaF_summary.csv
+  data/L4_V04_finite_size_nearest_load_summary.csv
+  data/L4_V04_intensive_susceptibility.csv
+
+Interpretation:
+- Fig.2 and Fig.3 support the central statement: pattern correlations produce a small but statistically robust intensive excess writing cost, while the cumulative burden grows with memory load.
+- Fig.4 is a finite-size diagnostic using nearest-load matching. Do not overclaim a nonzero thermodynamic-limit excess from this alone.
+- Fig.5 supports the Randers/Finsler layer: symmetric Hessian/Riemannian geometry accounts for interference cost, while Randers-type Finsler geometry accounts for writing/erasing asymmetry.

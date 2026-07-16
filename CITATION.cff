@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "Please cite this software and data release using the metadata below."
+title: "Reproducibility materials for Hebbian Interference Geometry in Hopfield Networks"
+version: "1.0.0"
+date-released: "2026-07-16"
+type: software
+authors:
+  - family-names: "Oosawa"
+    given-names: "Chikoo"
+    orcid: "https://orcid.org/0009-0007-8824-5465"
+repository-code: "REPLACE_WITH_PUBLIC_GITHUB_URL"
+url: "REPLACE_WITH_PUBLIC_GITHUB_RELEASE_URL"
+license: "REPLACE_AFTER_LICENSE_SELECTION"

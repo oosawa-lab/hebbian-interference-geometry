@@ -1,0 +1,109 @@
+L4/V04 reviewer-resistance simulation instructions
+==================================================
+
+Files
+-----
+- L4_V04_reviewer_robustness_simulation_20260710_0747JST.py
+- L4_V04_reviewer_robustness_instructions_20260710_0747JST.txt
+
+Purpose
+-------
+This script is a robustness/stress-test suite for the L4/V04 manuscript.
+It is designed to address likely reviewer concerns:
+
+1. Is the effect an artifact of the specific correlated-pattern generator?
+2. Does the effect depend too strongly on lambda?
+3. Is the intensive excess cost only a finite-size artifact?
+4. Does the Randers asymmetry depend on an arbitrary one-form choice?
+5. Are confidence intervals and sign robustness checked?
+
+Requirements
+------------
+Python 3.9 or later, numpy, matplotlib.
+
+Install if needed:
+
+  python3 -m pip install numpy matplotlib
+
+Quick test
+----------
+
+  python3 L4_V04_reviewer_robustness_simulation_20260710_0747JST.py --quick
+
+Recommended robustness run
+--------------------------
+
+  python3 L4_V04_reviewer_robustness_simulation_20260710_0747JST.py \
+    --outdir L4_V04_reviewer_robustness_results \
+    --Ns 64 128 256 512 \
+    --loads 0.10 0.30 0.60 \
+    --generators latent block mixture biased \
+    --corrs 0.15 0.25 0.35 0.45 \
+    --lambdas 0.5 1.0 2.0 4.0 \
+    --randers-alpha 0.15 \
+    --randers-modes mean pc1 random-fixed \
+    --reps 80 \
+    --bootstrap 500 \
+    --reference-loads 0.10 0.30 0.60 \
+    --nearest-load-tolerance 0.03
+
+Heavier run for a supplementary appendix
+----------------------------------------
+
+  python3 L4_V04_reviewer_robustness_simulation_20260710_0747JST.py \
+    --outdir L4_V04_reviewer_robustness_heavy \
+    --Ns 64 128 256 512 1024 \
+    --loads 0.10 0.30 0.60 \
+    --generators latent block mixture biased \
+    --corrs 0.10 0.20 0.30 0.40 0.50 \
+    --lambdas 0.5 1.0 2.0 4.0 \
+    --randers-alpha 0.15 \
+    --randers-modes mean pc1 random-fixed \
+    --reps 120 \
+    --bootstrap 1000 \
+    --reference-loads 0.10 0.30 0.60 \
+    --nearest-load-tolerance 0.03
+
+Main outputs
+------------
+data/L4_V04_robustness_trial_rows.csv
+data/L4_V04_robustness_summary.csv
+data/L4_V04_robustness_nearest_load_scaling.csv
+data/L4_V04_robustness_finite_size_power_fits.csv
+
+Main figures
+------------
+figs/robust_R1_corr_sweep_*.png
+figs/robust_R2_generator_comparison_*.png
+figs/robust_R3_lambda_sweep_*.png
+figs/robust_R4_finite_size_*.png
+figs/robust_R5_randers_mode_comparison_*.png
+
+How to interpret
+----------------
+Use this as a reviewer-resistance supplement.
+
+Good outcome:
+  Delta F_int is positive across several pattern generators and parameter
+  settings, with bootstrap confidence intervals mostly above zero.
+
+Cautious outcome:
+  Delta F_int is positive but decreases with N. In that case, state only that
+  the effect is finite-size robust and statistically robust; do not claim a
+  nonzero thermodynamic-limit value.
+
+Bad outcome:
+  The sign changes across generators or lambda values. In that case, revise
+  the manuscript to state that the effect is model-dependent and use it as a
+  diagnostic rather than a universal law.
+
+Suggested use in manuscript/rebuttal
+------------------------------------
+If reviewers question the robustness, add a supplementary paragraph:
+
+  We repeated the cost analysis across latent-template, block-template,
+  mixture-template, and biased independent pattern ensembles, and across
+  lambda values. The qualitative positive finite-size intensive excess cost
+  persists over the tested range, while finite-size fits remain consistent
+  with a cautious finite-size interpretation rather than a thermodynamic-limit
+  claim.

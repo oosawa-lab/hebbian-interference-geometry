@@ -1,0 +1,67 @@
+L4 special-issue retrieval/geometry simulation
+================================================
+
+Purpose
+-------
+Relate finite-size geometric Hebbian writing costs to Hopfield retrieval
+reliability and compare simulated costs with an overlap-moment prediction.
+
+Executed design
+---------------
+N = 128, 256, 512
+P/N = 0.05, 0.10, 0.15, 0.20, 0.30
+generators = latent, block, mixture
+correlation parameters = 0.15, 0.25, 0.35, 0.45
+cue-corruption probabilities = 0.05, 0.10, 0.15, 0.20
+50 realizations; 12 cues per noise level; 25 update steps
+lambda = 2; retrieval success threshold = final overlap >= 0.90
+seed = 20260715
+
+Scale
+-----
+18,000 memory-realization rows and 864,000 noisy-cue trials.
+The correlated-minus-uncorrelated analysis contains 720 condition contrasts.
+
+Corrected analytical benchmark
+------------------------------
+The active script includes the complete fourth-moment coefficient for the
+(3,1) and (2,1,1) index partitions. The earlier internal output is retained
+only in revision_history for auditability. The active comparison over 180
+conditions gives approximately:
+
+Pearson correlation       0.99917
+Spearman correlation      0.99271
+Mean prediction bias     -8.1e-7
+Mean absolute error       1.62e-5
+
+Retrieval-risk interpretation
+-----------------------------
+Across all 720 contrasts, the excess intensive cost is a moderate statistical
+predictor of increased retrieval-failure risk (Spearman about 0.407), but a
+weaker predictor of continuous final-overlap loss (Spearman about 0.229).
+For nominal loads P/N <= 0.20, the failure-risk association is stronger
+(Spearman about 0.552). These are diagnostic associations, not evidence for
+a new learning algorithm or deterministic prediction of individual recalls.
+
+Important output files
+----------------------
+data/trial_level_retrieval.csv
+data/realization_level_geometry.csv
+data/trial_condition_summary.csv
+data/realization_condition_summary.csv
+data/correlated_minus_uncorrelated_summary.csv
+data/analytical_prediction_comparison.csv
+data/analytical_prediction_metrics_corrected.csv
+data/retrieval_link_bootstrap_summary.csv
+data/retrieval_sign_summary.csv
+data/pooled_cost_retrieval_correlations.csv
+
+The active manuscript figures generated from these data are stored in the
+package-level figs/ directory. Legacy diagnostic plots are retained here only
+when they are consistent with the corrected calculation.
+
+Checkpoint and resume
+---------------------
+Each completed realization is recorded in data/completed_tasks.txt. Re-running
+the same command resumes from unfinished tasks. Use --restart to erase prior
+CSV/checkpoint outputs and begin again.

@@ -1,0 +1,237 @@
+L4 特集号向け追加計算：実行マニュアル
+=====================================
+
+収録ファイル
+------------
+- L4_special_issue_retrieval_geometry_simulation_20260715_0835JST.py
+- L4_special_issue_retrieval_geometry_manual_20260715_0835JST.txt
+
+目的
+----
+次の2点を一括して調べます。
+
+1. 幾何学的なHebbian書き込みコストと、Hopfield検索性能の関係
+2. pattern-overlap統計から得られる解析予測と、数値計算の比較
+
+主な観測量
+----------
+- intensive writing cost F_int
+- cumulative writing cost F_cum
+- final retrieval overlap
+- retrieval success probability
+- correlated minus uncorrelated retrieval degradation
+- Delta F_int と retrieval degradation のPearson/Spearman相関
+- analytical prediction と simulated Delta F_int の対応
+
+必要環境
+--------
+Python 3.10以降を推奨します。
+
+必要パッケージ:
+
+  python3 -m pip install numpy matplotlib
+
+PDF図は作らず、PNGのみを生成します。
+以前のfontTools/xml.etree問題を回避できます。
+
+
+1. 最初の動作確認
+-----------------
+
+  python3 L4_special_issue_retrieval_geometry_simulation_20260715_0835JST.py --quick
+
+出力:
+
+  L4_special_issue_retrieval_geometry_quick/
+
+
+2. 推奨計算
+-----------
+
+  python3 L4_special_issue_retrieval_geometry_simulation_20260715_0835JST.py \
+    --outdir L4_special_issue_retrieval_geometry_results \
+    --Ns 128 256 512 \
+    --loads 0.05 0.10 0.15 0.20 0.30 \
+    --generators latent block mixture \
+    --corrs 0.15 0.25 0.35 0.45 \
+    --cue-noises 0.05 0.10 0.15 0.20 \
+    --reps 20 \
+    --cues-per-noise 8 \
+    --max-steps 20 \
+    --lambda-interference 2.0
+
+この設定は、まず傾向を確認するための推奨版です。
+
+
+3. 査読用の強化計算
+-------------------
+
+  python3 L4_special_issue_retrieval_geometry_simulation_20260715_0835JST.py \
+    --outdir L4_special_issue_retrieval_geometry_heavy \
+    --Ns 128 256 512 \
+    --loads 0.05 0.10 0.15 0.20 0.30 \
+    --generators latent block mixture \
+    --corrs 0.15 0.25 0.35 0.45 \
+    --cue-noises 0.05 0.10 0.15 0.20 \
+    --reps 50 \
+    --cues-per-noise 12 \
+    --max-steps 25 \
+    --lambda-interference 2.0
+
+計算時間が長い場合は、まずN=128,256のみで実行し、その後N=512を
+別の出力ディレクトリで実行しても構いません。
+
+
+4. 分割実行例
+-------------
+
+小・中サイズ:
+
+  python3 L4_special_issue_retrieval_geometry_simulation_20260715_0835JST.py \
+    --outdir L4_retrieval_N128_256 \
+    --Ns 128 256 \
+    --loads 0.05 0.10 0.15 0.20 0.30 \
+    --generators latent block mixture \
+    --corrs 0.15 0.25 0.35 0.45 \
+    --cue-noises 0.05 0.10 0.15 0.20 \
+    --reps 50 \
+    --cues-per-noise 12
+
+N=512:
+
+  python3 L4_special_issue_retrieval_geometry_simulation_20260715_0835JST.py \
+    --outdir L4_retrieval_N512 \
+    --Ns 512 \
+    --loads 0.05 0.10 0.15 0.20 0.30 \
+    --generators latent block mixture \
+    --corrs 0.15 0.25 0.35 0.45 \
+    --cue-noises 0.05 0.10 0.15 0.20 \
+    --reps 50 \
+    --cues-per-noise 12
+
+
+5. 中断後の再開
+---------------
+
+各realizationの完了時に、
+
+  data/completed_tasks.txt
+
+へ記録します。
+
+同じコマンドを再実行すると、完了済みの条件をスキップして続行します。
+計算途中で端末を閉じても、原則として最初からやり直す必要はありません。
+
+
+6. 最初からやり直す
+-------------------
+
+  python3 L4_special_issue_retrieval_geometry_simulation_20260715_0835JST.py \
+    --outdir L4_special_issue_retrieval_geometry_results \
+    --restart \
+    --Ns 128 256 512 \
+    --loads 0.05 0.10 0.15 0.20 0.30 \
+    --generators latent block mixture \
+    --corrs 0.15 0.25 0.35 0.45 \
+    --cue-noises 0.05 0.10 0.15 0.20 \
+    --reps 20 \
+    --cues-per-noise 8
+
+
+7. 主な出力
+-----------
+
+data/trial_level_retrieval.csv
+  各cueのcost、初期overlap、最終overlap、successなど。
+
+data/realization_level_geometry.csv
+  各記憶集合の平均pair overlap、mean q^2、平均cost。
+
+data/trial_condition_summary.csv
+  条件別の検索性能と、cost-error相関。
+
+data/realization_condition_summary.csv
+  条件別の幾何学的コスト。
+
+data/correlated_minus_uncorrelated_summary.csv
+  Delta F_int、retrieval degradation、failure probability増加。
+
+data/analytical_prediction_comparison.csv
+  overlap-moment解析予測と数値結果の比較。
+
+data/pooled_cost_retrieval_correlations.csv
+  pooled Pearson/Spearman相関。
+
+
+8. 主な図
+---------
+
+fig_R1_deltaF_vs_retrieval_degradation.png
+  特集号向けの最重要図です。
+  幾何学的余剰コストが検索劣化と対応するかを示します。
+
+fig_R2_retrieval_vs_noise_*.png
+  cue noiseに対する検索overlap。
+
+fig_R3_analytic_vs_simulated_deltaF.png
+  解析予測とシミュレーションの比較。
+
+fig_R4_finite_size_cost_and_retrieval.png
+  finite-sizeでcostと検索劣化がどう変わるかを比較。
+
+fig_R5_success_heatmap_*.png
+  相関強度とcue noiseに対する検索成功率。
+
+
+9. 結果の判断
+-------------
+
+望ましい結果:
+- Delta F_int と retrieval degradation に正の相関がある。
+- 相関強度が大きいほど、両方が増える。
+- latent/blockで解析予測と数値結果が対応する。
+- mixtureでも定性的傾向が維持される。
+
+慎重な結果:
+- Delta F_intは正だがretrieval degradationとの相関が弱い。
+
+この場合の安全な結論:
+  幾何学的コストはHebbian書き込み干渉を測るが、
+  検索性能の直接的な予測量とは限らない。
+
+避ける主張:
+- 非ゼロの熱力学極限
+- retrieval性能改善アルゴリズムを実証した
+- Transformer/LLMに直接適用済み
+- 任意の相関アンサンブルで普遍的に成立
+
+
+10. bc20での実行例
+------------------
+
+  source .venv/bin/activate
+
+  nohup python3 L4_special_issue_retrieval_geometry_simulation_20260715_0835JST.py \
+    --outdir L4_special_issue_retrieval_geometry_heavy \
+    --Ns 128 256 512 \
+    --loads 0.05 0.10 0.15 0.20 0.30 \
+    --generators latent block mixture \
+    --corrs 0.15 0.25 0.35 0.45 \
+    --cue-noises 0.05 0.10 0.15 0.20 \
+    --reps 50 \
+    --cues-per-noise 12 \
+    --max-steps 25 \
+    --lambda-interference 2.0 \
+    > L4_retrieval_geometry.log 2>&1 &
+
+進捗確認:
+
+  tail -f L4_retrieval_geometry.log
+
+プロセス確認:
+
+  ps aux | grep L4_special_issue_retrieval_geometry
+
+停止:
+
+  kill <PID>

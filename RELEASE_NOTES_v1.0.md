@@ -12,7 +12,6 @@ special-issue submission.
 - main and supplementary figures;
 - data dictionary and execution manuals.
   
-
 ## Full reproducibility asset
 
 The complete trial-level CSV files and the audit-ready reproducibility

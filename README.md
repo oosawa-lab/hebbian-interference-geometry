@@ -103,14 +103,12 @@ paper/               associated-manuscript metadata
 - Long retrieval runs support checkpointing and resume.
 - Random seeds and executed parameter settings are recorded in the scripts and
   manuals.
-
+  
 ## Citation
 
-Before public release, replace the placeholder repository and release URLs in
-`CITATION.cff`. The manuscript should cite the fixed GitHub release tag and
-commit hash.
+Please cite the fixed repository release using the metadata provided in
+`CITATION.cff`.
 
 ## License
 
-A license has not been selected automatically. See
-`LICENSE_SELECTION_REQUIRED.md` before making the repository public.
+Source code is distributed under the MIT License.
